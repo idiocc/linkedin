@@ -8,8 +8,13 @@ import idioCore from '@idio/core'
 
 const Server = async () => {
   const { url, router, app } = await idioCore({
-    session: { use: true, keys: [process.env.SESSION_KEY || 'dev'] },
+    session: { use: true,
+      keys: [process.env.SESSION_KEY || 'dev'] },
     logger: { use: true },
+    static: {
+      use: true,
+      root: 'img',
+    },
   })
   router.get('/', (ctx) => {
     const u = userDiv(ctx.session.user)
@@ -52,8 +57,12 @@ const Server = async () => {
 const userDiv = (user) => {
   if (!user) return `
     <div class="User">
-      Welcome.
-      <a href="/auth/linkedin">Sign in</a>
+      <p>Welcome.</p>
+      <a href="/auth/linkedin" title="Sign In with LinkedIn">
+        <object data="button.svg" type="image/svg+xml">
+        <img src="linkedin.png" alt="Sign In With LinkedIn">
+        </object>
+      </a>
     </div>
   `
   const img = `<img src="${user.profilePicture}" width="50">`
@@ -73,5 +82,5 @@ const userDiv = (user) => {
   console.log(res)
   const { headers: { location } } = res
   console.log('\n > Redirect to Dialog %s', location)
-  await app.destroy()
+  // await app.destroy()
 })()

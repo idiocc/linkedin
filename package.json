@@ -20,7 +20,8 @@
     "example/": "yarn e example/example.js"
   },
   "files": [
-    "build"
+    "build",
+    "img"
   ],
   "repository": {
     "type": "git",
@@ -29,6 +30,10 @@
   "keywords": [
     "linkedin",
     "oauth",
+    "auth",
+    "authentication",
+    "login",
+    "signin",
     "idio"
   ],
   "author": "Anton <anton@adc.sh>",
