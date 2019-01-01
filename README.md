@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/%40idio%2Flinkedin.svg)](https://npmjs.org/package/@idio/linkedin)
 
-`@idio/linkedin` is The LinkedIn OAuth Login Routes For The Idio Web Server.
+<img src="https://raw.github.com/idiocc/linkedin/master/images/square.svg?sanitize=true" align="left">`@idio/linkedin` is The LinkedIn OAuth Login Routes For The Idio Web Server.
 
 ```sh
 yarn add -E @idio/linkedin
@@ -17,6 +17,7 @@ yarn add -E @idio/linkedin
   * [finish](#finish)
 - [`query(config: QueryConfig)`](#queryconfig-queryconfig-void)
   * [`QueryConfig`](#type-queryconfig)
+- [Button](#button)
 - [Copyright](#copyright)
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/0.svg?sanitize=true"></a></p>
@@ -51,8 +52,13 @@ import idioCore from '@idio/core'
 
 const Server = async () => {
   const { url, router, app } = await idioCore({
-    session: { use: true, keys: [process.env.SESSION_KEY || 'dev'] },
+    session: { use: true,
+      keys: [process.env.SESSION_KEY || 'dev'] },
     logger: { use: true },
+    static: {
+      use: true,
+      root: 'img',
+    },
   })
   router.get('/', (ctx) => {
     const u = userDiv(ctx.session.user)
@@ -95,8 +101,12 @@ const Server = async () => {
 const userDiv = (user) => {
   if (!user) return `
     <div class="User">
-      Welcome.
-      <a href="/auth/linkedin">Sign in</a>
+      <p>Welcome.</p>
+      <a href="/auth/linkedin" title="Sign In with LinkedIn">
+        <object data="button.svg" type="image/svg+xml">
+        <img src="linkedin.png" alt="Sign In With LinkedIn">
+        </object>
+      </a>
     </div>
   `
   const img = `<img src="${user.profilePicture}" width="50">`
@@ -111,21 +121,21 @@ const userDiv = (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 49ms 485b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=4348&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=4348&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 23ms 485b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=4375&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=4375&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=4348&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=4375&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
      'content-length': '485',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6NDM0OCwiX2V4cGlyZSI6MTU0NjQ0NTQ0MDE0OCwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
-        'koa:sess.sig=WUzjaVNK5ML_XUxmRzJe79s25AE; path=/; httponly' ],
-     date: 'Tue, 01 Jan 2019 16:10:40 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6NDM3NSwiX2V4cGlyZSI6MTU0NjQ1NDY2Njc1NCwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=O68-6E0a00pDejJQbLteLNT4NNQ; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 18:44:26 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=4348&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=4375&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -150,6 +160,20 @@ __<a name="type-queryconfig">`QueryConfig`</a>__: Options for Query.
 | __data*__  | _*_      | The object containing data to query the API with. | -       |
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
+
+## Button
+
+The package provides the sign-in SVG button with the PNG fallback:
+
+![Sing In With LinkedIn](img/button.svg)
+
+```html
+<a href="/auth/linkedin" title="Sign In with LinkedIn">
+  <object data="button.svg" type="image/svg+xml">
+    <img src="linkedin.png">
+  </object>
+</a>
+```
 
 ## Copyright
 

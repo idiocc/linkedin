@@ -41,3 +41,17 @@ The query method allows to query the LinkedIn API. The `v2` version of the API o
 %TYPEDEF types/index.xml QueryConfig%
 
 %~%
+
+## Button
+
+The package provides the sign-in SVG button with the PNG fallback:
+
+![Sing In With LinkedIn](img/button.svg)
+
+```html
+<a href="/auth/linkedin" title="Sign In with LinkedIn">
+  <object data="button.svg" type="image/svg+xml">
+    <img src="linkedin.png">
+  </object>
+</a>
+```
