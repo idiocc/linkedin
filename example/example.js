@@ -24,20 +24,24 @@ const Server = async () => {
     client_secret: process.env.LINKEDIN_SECRET,
     scope: 'r_liteprofile,r_basicprofile',
     async finish(ctx, token, user) {
-      const { positions: { values: positions } } = await query({
-        path: 'people/~:(positions)',
+      const { positions: { values: pos } } = await query({
         token,
+        path: 'people/~:(positions)',
         version: 'v1',
       })
-      const pos = positions.map(({ title, company: { id, name }, location: { name: location } }) => {
+      const positions = pos.map(({
+        title,
+        company: { id, name },
+        location: { name: location } ,
+      }) => {
         return {
-          title,
-          id, name, location: location.replace(/,\s*$/, ''),
+          id, name, title,
+          location: location.replace(/,\s*$/, ''),
         }
       })
       ctx.session.token = token
       ctx.session.user = user
-      ctx.session.positions = pos
+      ctx.session.positions = positions
       ctx.redirect('/')
     },
   })
@@ -47,10 +51,17 @@ const Server = async () => {
 
 const userDiv = (user) => {
   if (!user) return `
-    <div class="User">Welcome. <a href="/auth/linkedin">Sign in</a></div>
+    <div class="User">
+      Welcome.
+      <a href="/auth/linkedin">Sign in</a>
+    </div>
   `
   const img = `<img src="${user.profilePicture}" width="50">`
-  return `<div class="User">${img} Hello, ${user.firstName} ${user.lastName}! <a href="/signout">Sign out</a></div>`
+  return `
+    <div class="User">
+      ${img} Hello, ${user.firstName} ${user.lastName}!
+      <a href="/signout">Sign out</a>
+    </div>`
 }
 
 /* end example */
