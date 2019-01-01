@@ -1,0 +1,11 @@
+.IdioAuth {
+  display: table;
+  border-radius: 3px;
+  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+  text-decoration: none;
+  color: white;
+}
+.IdioAuthCell {
+  display: table-cell;
+  vertical-align: middle;
+}

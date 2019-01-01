@@ -3,7 +3,7 @@ import { aqt } from 'rqt'
 import dotenv from '@demimonde/dotenv'
 dotenv()
 /* start example */
-import linkedIn, { query } from '../src'
+import linkedIn, { query, linkedInButton, getUser } from '../src'
 import idioCore from '@idio/core'
 
 const Server = async () => {
@@ -11,14 +11,17 @@ const Server = async () => {
     session: { use: true,
       keys: [process.env.SESSION_KEY || 'dev'] },
     logger: { use: true },
-    static: {
-      use: true,
-      root: 'img',
-    },
   })
-  router.get('/', (ctx) => {
-    const u = userDiv(ctx.session.user)
-    ctx.body = `${u}hello world`
+  router.get('/', async (ctx) => {
+    const u = await userDiv(ctx.session.user)
+    ctx.body = `<!doctype html>
+    <html>
+      <body>
+        ${u}
+        <hr>
+        &copy;Art Deco, 2019
+      </body>
+    </html>`
   })
   router.get('/signout', (ctx) => {
     ctx.session = null
@@ -45,7 +48,7 @@ const Server = async () => {
         }
       })
       ctx.session.token = token
-      ctx.session.user = user
+      ctx.session.user = getUser(user)
       ctx.session.positions = positions
       ctx.redirect('/')
     },
@@ -54,17 +57,19 @@ const Server = async () => {
   return { app, url }
 }
 
-const userDiv = (user) => {
-  if (!user) return `
+const userDiv = async (user) => {
+  if (!user) {
+    const { idioCommon, style, button } = await linkedInButton()
+    return `
+    <style>
+      ${idioCommon}
+      ${style}
+    </style>
     <div class="User">
       <p>Welcome.</p>
-      <a href="/auth/linkedin" title="Sign In with LinkedIn">
-        <object data="button.svg" type="image/svg+xml">
-        <img src="linkedin.png" alt="Sign In With LinkedIn">
-        </object>
-      </a>
-    </div>
-  `
+      ${button}
+    </div>`
+  }
   const img = `<img src="${user.profilePicture}" width="50">`
   return `
     <div class="User">
@@ -82,5 +87,5 @@ const userDiv = (user) => {
   console.log(res)
   const { headers: { location } } = res
   console.log('\n > Redirect to Dialog %s', location)
-  await app.destroy()
+  // await app.destroy()
 })()

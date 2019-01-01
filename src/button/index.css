@@ -1,0 +1,19 @@
+#IdioLinkedIn {
+  background: #0077B5;
+}
+#IdioLinkedIn:hover, #IdioLinkedIn:focus {
+  background: #0369A0;
+}
+#IdioLinkedIn:active {
+  background: #066093;
+}
+#IdioLinkedinLogo {
+  font-family: 'Myriad Pro', 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+  font-size: 1.5em;
+  padding-left: 6px;
+  padding-right: 5px;
+  border-right: 1px solid #0369A0;
+  border-radius: 3px;
+  font-weight: 600;
+  background: #0077B5;
+}

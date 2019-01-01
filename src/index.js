@@ -1,5 +1,7 @@
 import { jqt } from 'rqt'
 import { stringify } from 'querystring'
+import read from '@wrote/read'
+import { join } from 'path'
 
 const getLocalised = ({ localized, preferredLocale }) => {
   const { country, language } = preferredLocale
@@ -17,7 +19,11 @@ const getProfilePicture = ({ 'displayImage~': displayImage }) => {
   return identifier
 }
 
-const getUser = user => {
+/**
+ * Normalize user details from the API response at /me with `r_liteprofile` permission to get the localized first and last names, and the URL to the profile pucture.
+ * @param {*} user The full response from `/me` route.
+ */
+export const getUser = user => {
   const firstName = getLocalised(user.firstName)
   const lastName = getLocalised(user.lastName)
   const profilePicture = getProfilePicture(user.profilePicture)
@@ -178,6 +184,28 @@ const getRedirect = ({ protocol, host }, path) => {
   ]
   const p = parts.join('')
   return p
+}
+
+/**
+ * Returns the styles and HTML for the button.
+ */
+export const linkedInButton = async () => {
+  const idioCommon = await read(join(__dirname, 'button/common.css'))
+  const style = await read(join(__dirname, 'button/index.css'))
+  const button = `
+  <a href="/auth/linkedin" class="IdioAuth" id="IdioLinkedIn">
+    <div class="IdioAuthCell" id="IdioLinkedinLogo">
+      in
+    </div>
+      <div class="IdioAuthCell" style="padding-left:0.5em;padding-right:0.5em;font-size:smaller;">
+        Sign In With LinkedIn
+    </div>
+  </a>`
+  return {
+    idioCommon,
+    style,
+    button,
+  }
 }
 
 /* documentary types/index.xml */

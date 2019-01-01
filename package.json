@@ -20,8 +20,7 @@
     "example/": "yarn e example/example.js"
   },
   "files": [
-    "build",
-    "img"
+    "build"
   ],
   "repository": {
     "type": "git",
@@ -52,6 +51,7 @@
     "zoroaster": "3.6.6"
   },
   "dependencies": {
+    "@wrote/read": "1.0.0",
     "rqt": "3.0.1"
   }
 }
