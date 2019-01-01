@@ -16,4 +16,18 @@
         The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`.
     </prop>
   </type>
+  <type name="QueryConfig" desc="Options for Query.">
+    <prop string name="token">
+       The access token with appropriate permissions.
+    </prop>
+    <prop string name="version" default="v2">
+       The version of the API to query.
+    </prop>
+    <prop string name="path">
+       The API endpoint.
+    </prop>
+    <prop name="data">
+       The object containing data to query the API with.
+    </prop>
+  </type>
 </types>

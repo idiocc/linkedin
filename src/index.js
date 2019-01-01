@@ -107,13 +107,19 @@ const getInfo = async (token) => {
 
 /**
  * Request data from LinkedIn API.
+ * @param {QueryConfig} config Options for Query.
+ * @param {string} config.token The access token with appropriate permissions.
+ * @param {string} [config.version="v2"] The version of the API to query. Default `v2`.
+ * @param {string} config.path The API endpoint.
+ * @param {*} config.data The object containing data to query the API with.
  */
-export const query = async ({
-  token,
-  version = 'v2',
-  path,
-  data,
-}) => {
+export const query = async (config) => {
+  const {
+    token,
+    version = 'v2',
+    path,
+    data,
+  } = config
   const url = `https://api.linkedin.com/${version}/${path}`
   const d = stringify(data)
   const res = await jqt(`${url}?${d}`, {
@@ -182,4 +188,10 @@ const getRedirect = ({ protocol, host }, path) => {
  * @prop {string} [path="/auth/linkedin"] The server path to start the login flaw and use for redirect (`${path}/redirect`). Default `/auth/linkedin`.
  * @prop {string} [scope] The scope to ask permissions for.
  * @prop {(ctx, token, user) => {}} [finish="setSession; redirect;"] The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. Default `setSession; redirect;`.
+ *
+ * @typedef {Object} QueryConfig Options for Query.
+ * @prop {string} token The access token with appropriate permissions.
+ * @prop {string} [version="v2"] The version of the API to query. Default `v2`.
+ * @prop {string} path The API endpoint.
+ * @prop {*} data The object containing data to query the API with.
  */

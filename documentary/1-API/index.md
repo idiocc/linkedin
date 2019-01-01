@@ -17,7 +17,7 @@ import linkedin from '@idio/linkedin'
 
 Sets up the `/auth/linkedin` and `/auth/linkedin/redirect` paths on the router to enable LinkedIn App Login. The session middleware needs to be installed to remember the state. The state is destroyed after the redirect.
 
-%TYPEDEF types/index.xml%
+%TYPEDEF types/index.xml Config%
 
 %EXAMPLE: example/example.js, ../src => @idio/linkedin%
 %FORK example example/example%
@@ -30,8 +30,14 @@ The config allows to set the finish function that can be used to alter the logic
 
 %~ width="15"%
 
-### query
+```## query
+[
+  ["config", "QueryConfig"]
+]
+```
 
-The query method allows to query the LinkedIn API.
+The query method allows to query the LinkedIn API. The `v2` version of the API only allows to query basic data with the `r_liteprofile` permission. The other methods of the API are not pubic. This package will automatically query the `/me` route to find out the user's name and profile picture, therefore specifying the `r_liteprofile` scope is required. The `v1` version which is used to query positions with the `r_basicprofile` scope will be switched off in March 2019.
+
+%TYPEDEF types/index.xml QueryConfig%
 
 %~%
