@@ -35,7 +35,7 @@ const getUser = user => {
  * @param {string} config.client_id The app's client id.
  * @param {string} config.client_secret The app's client secret.
  * @param {string} [config.path="/auth/linkedin"] The server path to start the login flaw and use for redirect (`${path}/redirect`). Default `/auth/linkedin`.
- * @param {string} [config.scope] The scope to ask permissions for.
+ * @param {string} [config.scope="r_liteprofile"] The scope to ask permissions for. Default `r_liteprofile`.
  * @param {(ctx, token, user) => {}} [config.finish="setSession; redirect;"] The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. Default `setSession; redirect;`.
  */
 export default async function linkedin(router, config = {}) {
@@ -186,7 +186,7 @@ const getRedirect = ({ protocol, host }, path) => {
  * @prop {string} client_id The app's client id.
  * @prop {string} client_secret The app's client secret.
  * @prop {string} [path="/auth/linkedin"] The server path to start the login flaw and use for redirect (`${path}/redirect`). Default `/auth/linkedin`.
- * @prop {string} [scope] The scope to ask permissions for.
+ * @prop {string} [scope="r_liteprofile"] The scope to ask permissions for. Default `r_liteprofile`.
  * @prop {(ctx, token, user) => {}} [finish="setSession; redirect;"] The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. Default `setSession; redirect;`.
  *
  * @typedef {Object} QueryConfig Options for Query.
