@@ -15,6 +15,7 @@ yarn add -E @idio/linkedin
 - [`linkedin(router: Router, config: Config)`](#linkedinrouter-routerconfig-config-void)
   * [`Config`](#type-config)
   * [finish](#finish)
+- [`getUser(user: *): { firstName, lastName, profilePicture }`](#getuseruser---firstname-lastname-profilepicture-)
 - [`query(config: QueryConfig)`](#queryconfig-queryconfig-void)
   * [`QueryConfig`](#type-queryconfig)
 - [Button](#button)
@@ -47,7 +48,7 @@ __<a name="type-config">`Config`</a>__: Options for the program.
 | finish             | _(ctx, token, user) =&gt; {}_ | The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. | `setSession; redirect;` |
 
 ```js
-import linkedIn, { query } from '@idio/linkedin'
+import linkedIn, { query, linkedInButton, getUser } from '@idio/linkedin'
 import idioCore from '@idio/core'
 
 const Server = async () => {
@@ -55,14 +56,17 @@ const Server = async () => {
     session: { use: true,
       keys: [process.env.SESSION_KEY || 'dev'] },
     logger: { use: true },
-    static: {
-      use: true,
-      root: 'img',
-    },
   })
-  router.get('/', (ctx) => {
-    const u = userDiv(ctx.session.user)
-    ctx.body = `${u}hello world`
+  router.get('/', async (ctx) => {
+    const u = await userDiv(ctx.session.user)
+    ctx.body = `<!doctype html>
+    <html>
+      <body>
+        ${u}
+        <hr>
+        &copy;Art Deco, 2019
+      </body>
+    </html>`
   })
   router.get('/signout', (ctx) => {
     ctx.session = null
@@ -89,7 +93,7 @@ const Server = async () => {
         }
       })
       ctx.session.token = token
-      ctx.session.user = user
+      ctx.session.user = getUser(user)
       ctx.session.positions = positions
       ctx.redirect('/')
     },
@@ -98,17 +102,19 @@ const Server = async () => {
   return { app, url }
 }
 
-const userDiv = (user) => {
-  if (!user) return `
+const userDiv = async (user) => {
+  if (!user) {
+    const { idioCommon, style, button } = await linkedInButton()
+    return `
+    <style>
+      ${idioCommon}
+      ${style}
+    </style>
     <div class="User">
       <p>Welcome.</p>
-      <a href="/auth/linkedin" title="Sign In with LinkedIn">
-        <object data="button.svg" type="image/svg+xml">
-        <img src="linkedin.png" alt="Sign In With LinkedIn">
-        </object>
-      </a>
-    </div>
-  `
+      ${button}
+    </div>`
+  }
   const img = `<img src="${user.profilePicture}" width="50">`
   return `
     <div class="User">
@@ -121,21 +127,21 @@ const userDiv = (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 37ms 485b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=5278&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=5278&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 21ms 485b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=6757&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=6757&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=5278&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=6757&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
      'content-length': '485',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6NTI3OCwiX2V4cGlyZSI6MTU0NjQ1NjU4MDk3OSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
-        'koa:sess.sig=yr6VWnMO3PTKGOtpntGRrvP1CNg; path=/; httponly' ],
-     date: 'Tue, 01 Jan 2019 19:16:20 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6Njc1NywiX2V4cGlyZSI6MTU0NjQ3MjEzMDI3OSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=7MLBXhpIhvZvagp81tJw2PXt2mE; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 23:35:30 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=5278&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=6757&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -144,7 +150,13 @@ http://localhost:5000
 
 The config allows to set the finish function that can be used to alter the logic of setting the token on the session or performing additional operations such as storing a new user in the database. The default sets the token on the `ctx.session` and also sets the user data such as name and id in the `ctx.session.user` property.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true"></a></p>
+
+## `getUser(`<br/>&nbsp;&nbsp;`user: *,`<br/>`): { firstName, lastName, profilePicture }`
+
+When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method keeps only 3 properties as strings: the `firstName`, `lastName` and `profilePicture`.
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
 
 ## `query(`<br/>&nbsp;&nbsp;`config: QueryConfig,`<br/>`): void`
 
@@ -159,21 +171,18 @@ __<a name="type-queryconfig">`QueryConfig`</a>__: Options for Query.
 | __data*__  | _*_      | The object containing data to query the API with. | -       |
 | version    | _string_ | The version of the API to query.                  | `v2`    |
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true"></a></p>
 
 ## Button
 
-The package provides the sign-in SVG button with the PNG fallback:
+The package provides the implementation of the Sign-In button with CSS and HTML. It was added in favour of the static image button to be able to switch background color on hover, and instead of an SVG button because problems will arise when placing SVG into an `a` element.
 
-![Sing In With LinkedIn](https://raw.github.com/idiocc/linkedin/master/img/button.svg?sanitize=true)
+![Default Button](img/linkedin.png) The default linked-in button.
+<br>
+![Idio Linkedin Button](img/button.png) Idio's button CSS+HTML implementation.
 
-```html
-<a href="/auth/linkedin" title="Sign In with LinkedIn">
-  <object data="button.svg" type="image/svg+xml">
-    <img src="linkedin.png">
-  </object>
-</a>
-```
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true"></a></p>
+
 
 ## Copyright
 

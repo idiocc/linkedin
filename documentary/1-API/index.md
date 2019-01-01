@@ -28,7 +28,17 @@ Sets up the `/auth/linkedin` and `/auth/linkedin/redirect` paths on the router t
 
 The config allows to set the finish function that can be used to alter the logic of setting the token on the session or performing additional operations such as storing a new user in the database. The default sets the token on the `ctx.session` and also sets the user data such as name and id in the `ctx.session.user` property.
 
-%~ width="15"%
+%~%
+
+```## getUser => { firstName, lastName, profilePicture }
+[
+  ["user", "*"]
+]
+```
+
+When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method keeps only 3 properties as strings: the `firstName`, `lastName` and `profilePicture`.
+
+%~%
 
 ```## query
 [
@@ -41,17 +51,3 @@ The query method allows to query the LinkedIn API. The `v2` version of the API o
 %TYPEDEF types/index.xml QueryConfig%
 
 %~%
-
-## Button
-
-The package provides the sign-in SVG button with the PNG fallback:
-
-![Sing In With LinkedIn](https://raw.github.com/idiocc/linkedin/master/img/button.svg?sanitize=true)
-
-```html
-<a href="/auth/linkedin" title="Sign In with LinkedIn">
-  <object data="button.svg" type="image/svg+xml">
-    <img src="linkedin.png">
-  </object>
-</a>
-```
