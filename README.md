@@ -15,7 +15,7 @@ yarn add -E @idio/linkedin
 - [`linkedin(router: Router, config: Config)`](#linkedinrouter-routerconfig-config-void)
   * [`Config`](#type-config)
   * [finish](#finish)
-- [`getUser(user: *): { firstName, lastName, profilePicture }`](#getuseruser---firstname-lastname-profilepicture-)
+- [`getUser(user: *): { id, firstName, lastName, profilePicture }`](#getuseruser---id-firstname-lastname-profilepicture-)
 - [`query(config: QueryConfig)`](#queryconfig-queryconfig-void)
   * [`QueryConfig`](#type-queryconfig)
 - [Button](#button)
@@ -127,21 +127,21 @@ const userDiv = async (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 34ms 485b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=5452&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=5452&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 21ms 485b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=9544&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=9544&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=5452&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=9544&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
      'content-length': '485',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6NTQ1MiwiX2V4cGlyZSI6MTU0NjQ3MjQxNDU4NCwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
-        'koa:sess.sig=yyLhb-rx3e-dEy22khOoqmItRQI; path=/; httponly' ],
-     date: 'Tue, 01 Jan 2019 23:40:14 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6OTU0NCwiX2V4cGlyZSI6MTU0NjQ3MjY3ODc4OSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=T4QTzdHe5wVnVCVYds3njIOeIE8; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 23:44:38 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=5452&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=9544&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -152,9 +152,9 @@ The config allows to set the finish function that can be used to alter the logic
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true"></a></p>
 
-## `getUser(`<br/>&nbsp;&nbsp;`user: *,`<br/>`): { firstName, lastName, profilePicture }`
+## `getUser(`<br/>&nbsp;&nbsp;`user: *,`<br/>`): { id, firstName, lastName, profilePicture }`
 
-When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method keeps only 3 properties as strings: the `firstName`, `lastName` and `profilePicture`.
+When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method keeps those properties as strings and returns the `id`, `firstName`, `lastName` and `profilePicture`.
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
 

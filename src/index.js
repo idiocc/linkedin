@@ -28,6 +28,7 @@ export const getUser = user => {
   const lastName = getLocalised(user.lastName)
   const profilePicture = getProfilePicture(user.profilePicture)
   return {
+    id: user.id,
     firstName,
     lastName,
     profilePicture,

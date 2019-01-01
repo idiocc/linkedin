@@ -30,13 +30,13 @@ The config allows to set the finish function that can be used to alter the logic
 
 %~%
 
-```## getUser => { firstName, lastName, profilePicture }
+```## getUser => { id, firstName, lastName, profilePicture }
 [
   ["user", "*"]
 ]
 ```
 
-When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method keeps only 3 properties as strings: the `firstName`, `lastName` and `profilePicture`.
+When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method keeps those properties as strings and returns the `id`, `firstName`, `lastName` and `profilePicture`.
 
 %~%
 
