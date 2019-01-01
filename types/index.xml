@@ -7,27 +7,41 @@
       The app's client secret.
     </prop>
     <prop string name="path" default="/auth/linkedin">
-       The server path to start the login flaw and use for redirect (`${path}/redirect`).
+      The server path to start the login flaw and use for redirect (`${path}/redirect`).
     </prop>
     <prop string name="scope" default="r_liteprofile">
-       The scope to ask permissions for.
+      The scope to ask permissions for.
     </prop>
     <prop name="finish" type="(ctx, token, user) => {}" default="setSession; redirect;">
-        The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`.
+      The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`.
     </prop>
   </type>
   <type name="QueryConfig" desc="Options for Query.">
     <prop string name="token">
-       The access token with appropriate permissions.
+      The access token with appropriate permissions.
     </prop>
     <prop string name="path">
-       The API endpoint.
+      The API endpoint.
     </prop>
     <prop name="data">
-       The object containing data to query the API with.
+      The object containing data to query the API with.
     </prop>
     <prop string name="version" default="v2">
-       The version of the API to query.
+      The version of the API to query.
+    </prop>
+  </type>
+  <type name="User" desc="The normalised user data from the `/me` path.">
+    <prop string name="id">
+      The user ID.
+    </prop>
+    <prop string name="firstName">
+      The user's first name.
+    </prop>
+    <prop string name="lastName">
+      The user's last name.
+    </prop>
+    <prop string name="profilePicture">
+      The URL to the profile picture.
     </prop>
   </type>
 </types>

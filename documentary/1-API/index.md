@@ -36,7 +36,9 @@ The config allows to set the finish function that can be used to alter the logic
 ]
 ```
 
-When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method keeps those properties as strings and returns the `id`, `firstName`, `lastName` and `profilePicture`.
+When data is requested from `/me` route for the lite profile, the results will come back containing a lot of metadata such as names' locales and an array with profile pictures of different sizes. The `getUser` method returns those properties as strings.
+
+%TYPEDEF types/index.xml User%
 
 %~%
 

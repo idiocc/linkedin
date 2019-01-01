@@ -22,6 +22,7 @@ const getProfilePicture = ({ 'displayImage~': displayImage }) => {
 /**
  * Normalize user details from the API response at /me with `r_liteprofile` permission to get the localized first and last names, and the URL to the profile pucture.
  * @param {*} user The full response from `/me` route.
+ * @returns {User} The object with string properties.
  */
 export const getUser = user => {
   const firstName = getLocalised(user.firstName)
@@ -223,4 +224,10 @@ export const linkedInButton = async () => {
  * @prop {string} path The API endpoint.
  * @prop {*} data The object containing data to query the API with.
  * @prop {string} [version="v2"] The version of the API to query. Default `v2`.
+ *
+ * @typedef {Object} User The normalised user data from the `/me` path.
+ * @prop {string} id The user ID.
+ * @prop {string} firstName The user's first name.
+ * @prop {string} lastName The user's last name.
+ * @prop {string} profilePicture The URL to the profile picture.
  */
