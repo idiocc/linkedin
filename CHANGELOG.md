@@ -1,3 +1,9 @@
+## 2 January 2019
+
+### 1.2.0
+
+- [feature] HTML sign-in button, export `getUser`.
+
 ## 1 January 2019
 
 ### 1.1.0
