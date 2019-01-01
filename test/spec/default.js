@@ -1,4 +1,4 @@
-import { equal, deepEqual } from 'zoroaster/assert'
+import { equal } from 'zoroaster/assert'
 import core from '@idio/core'
 import { aqt } from 'rqt'
 import Context from '../context'
