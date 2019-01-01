@@ -1,10 +1,19 @@
 <types>
   <type name="Config" desc="Options for the program.">
-    <prop boolean name="shouldRun" default="true">
-      A boolean option.
+    <prop string name="client_id">
+      The app's client id.
     </prop>
-    <prop string name="text">
-      A text to return.
+    <prop string name="client_secret">
+      The app's client secret.
+    </prop>
+    <prop string name="path" default="/auth/linkedin">
+       The server path to start the login flaw and use for redirect (`${path}/redirect`).
+    </prop>
+    <prop opt string name="scope">
+       The scope to ask permissions for.
+    </prop>
+    <prop name="finish" type="(ctx, token, user) => {}" default="setSession; redirect;">
+        The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`.
     </prop>
   </type>
 </types>
