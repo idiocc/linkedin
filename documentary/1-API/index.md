@@ -1,9 +1,11 @@
 ## API
 
-The package is available by importing its default function:
+The package is available by importing its default and named functions:
 
 ```js
-import linkedin from '@idio/linkedin'
+import linkedin, {
+  linkedInButton, query, getUser,
+} from '@idio/linkedin'
 ```
 
 %~%

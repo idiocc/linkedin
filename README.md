@@ -19,17 +19,19 @@ yarn add -E @idio/linkedin
   * [`User`](#type-user)
 - [`query(config: QueryConfig)`](#queryconfig-queryconfig-void)
   * [`QueryConfig`](#type-queryconfig)
-- [Button](#button)
+- [`linkedInButton(): { idioCommon, style, button }`](#linkedinbutton--idiocommon-style-button-)
 - [Copyright](#copyright)
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/0.svg?sanitize=true"></a></p>
 
 ## API
 
-The package is available by importing its default function:
+The package is available by importing its default and named functions:
 
 ```js
-import linkedin from '@idio/linkedin'
+import linkedin, {
+  linkedInButton, query, getUser,
+} from '@idio/linkedin'
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/1.svg?sanitize=true"></a></p>
@@ -129,20 +131,20 @@ const userDiv = async (user) => {
 http://localhost:5000 
   <-- GET /auth/linkedin
   --> GET /auth/linkedin 302 18ms 485b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=9642&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=9642&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=3904&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=3904&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=9642&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=3904&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
      'content-length': '485',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6OTY0MiwiX2V4cGlyZSI6MTU0NjQ3MzA4MjQ1MSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
-        'koa:sess.sig=PTiUFIM9wsWXU5i-zsA6NeLHMmw; path=/; httponly' ],
-     date: 'Tue, 01 Jan 2019 23:51:22 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6MzkwNCwiX2V4cGlyZSI6MTU0NjQ3MzI1NzEyOSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=IcFHyGfaqX8JgLRs43FMrZkvEgA; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 23:54:17 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=9642&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=3904&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -183,7 +185,7 @@ __<a name="type-queryconfig">`QueryConfig`</a>__: Options for Query.
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true"></a></p>
 
-## Button
+## `linkedInButton(): { idioCommon, style, button }`
 
 The package provides the implementation of the Sign-In button with CSS and HTML. It was added in favour of the static image button to be able to switch background color on hover, and instead of an SVG button because problems will arise when placing SVG into an `a` element.
 
