@@ -4,7 +4,7 @@
 
 ## Copyright
 
-(c) [Idio][1] 2018
+(c) [Idio][1] 2019
 
 [1]: https://idio.cc
 
