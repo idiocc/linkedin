@@ -1,8 +1,8 @@
-# @idio/linkedin
+# <img src="https://raw.github.com/idiocc/linkedin/master/square.svg?sanitize=true" align="left"> @idio/linkedin
 
 [![npm version](https://badge.fury.io/js/%40idio%2Flinkedin.svg)](https://npmjs.org/package/@idio/linkedin)
 
-<img src="https://raw.github.com/idiocc/linkedin/master/square.svg?sanitize=true" align="left">`@idio/linkedin` is The LinkedIn OAuth Login Routes For The Idio Web Server.
+`@idio/linkedin` is The LinkedIn OAuth Login Routes For The Idio Web Server.
 
 ```sh
 yarn add -E @idio/linkedin
@@ -121,16 +121,16 @@ const userDiv = (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 26ms 483b
+  --> GET /auth/linkedin 302 24ms 483b
 { body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=409&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=409&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
    { location: 'https://www.linkedin.com/oauth/v2/authorization?state=409&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
      'content-length': '483',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6NDA5LCJfZXhwaXJlIjoxNTQ2NDU1NDUxNzE4LCJfbWF4QWdlIjo4NjQwMDAwMH0=; path=/; httponly',
-        'koa:sess.sig=jhz5Le51docbDaOwN11BMO_IYl4; path=/; httponly' ],
-     date: 'Tue, 01 Jan 2019 18:57:31 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6NDA5LCJfZXhwaXJlIjoxNTQ2NDU2MDg2Mjc3LCJfbWF4QWdlIjo4NjQwMDAwMH0=; path=/; httponly',
+        'koa:sess.sig=SXY5t2BSXRGCasod5LYKkSSsr2k; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 19:08:06 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
