@@ -109,9 +109,9 @@ const getInfo = async (token) => {
  * Request data from LinkedIn API.
  * @param {QueryConfig} config Options for Query.
  * @param {string} config.token The access token with appropriate permissions.
- * @param {string} [config.version="v2"] The version of the API to query. Default `v2`.
  * @param {string} config.path The API endpoint.
  * @param {*} config.data The object containing data to query the API with.
+ * @param {string} [config.version="v2"] The version of the API to query. Default `v2`.
  */
        const query = async (config) => {
   const {
@@ -191,9 +191,9 @@ const getRedirect = ({ protocol, host }, path) => {
  *
  * @typedef {Object} QueryConfig Options for Query.
  * @prop {string} token The access token with appropriate permissions.
- * @prop {string} [version="v2"] The version of the API to query. Default `v2`.
  * @prop {string} path The API endpoint.
  * @prop {*} data The object containing data to query the API with.
+ * @prop {string} [version="v2"] The version of the API to query. Default `v2`.
  */
 
 

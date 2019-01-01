@@ -121,21 +121,21 @@ const userDiv = (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 24ms 483b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=409&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=409&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 37ms 485b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=5278&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=5278&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=409&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=5278&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
-     'content-length': '483',
+     'content-length': '485',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6NDA5LCJfZXhwaXJlIjoxNTQ2NDU2MDg2Mjc3LCJfbWF4QWdlIjo4NjQwMDAwMH0=; path=/; httponly',
-        'koa:sess.sig=SXY5t2BSXRGCasod5LYKkSSsr2k; path=/; httponly' ],
-     date: 'Tue, 01 Jan 2019 19:08:06 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6NTI3OCwiX2V4cGlyZSI6MTU0NjQ1NjU4MDk3OSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=yr6VWnMO3PTKGOtpntGRrvP1CNg; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 19:16:20 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=409&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=5278&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -155,9 +155,9 @@ __<a name="type-queryconfig">`QueryConfig`</a>__: Options for Query.
 |    Name    |   Type   |                    Description                    | Default |
 | ---------- | -------- | ------------------------------------------------- | ------- |
 | __token*__ | _string_ | The access token with appropriate permissions.    | -       |
-| version    | _string_ | The version of the API to query.                  | `v2`    |
 | __path*__  | _string_ | The API endpoint.                                 | -       |
 | __data*__  | _*_      | The object containing data to query the API with. | -       |
+| version    | _string_ | The version of the API to query.                  | `v2`    |
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
 

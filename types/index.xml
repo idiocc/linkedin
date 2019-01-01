@@ -20,14 +20,14 @@
     <prop string name="token">
        The access token with appropriate permissions.
     </prop>
-    <prop string name="version" default="v2">
-       The version of the API to query.
-    </prop>
     <prop string name="path">
        The API endpoint.
     </prop>
     <prop name="data">
        The object containing data to query the API with.
+    </prop>
+    <prop string name="version" default="v2">
+       The version of the API to query.
     </prop>
   </type>
 </types>
