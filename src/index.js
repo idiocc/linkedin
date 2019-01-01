@@ -43,7 +43,7 @@ export default async function linkedin(router, config = {}) {
     client_id,
     client_secret,
     path = '/auth/linkedin',
-    scope,
+    scope = 'r_liteprofile',
     finish = /* async */ (ctx, token, user, /* next */) => {
       ctx.session.token = token
       ctx.session.user = getUser(user)

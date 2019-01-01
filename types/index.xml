@@ -9,7 +9,7 @@
     <prop string name="path" default="/auth/linkedin">
        The server path to start the login flaw and use for redirect (`${path}/redirect`).
     </prop>
-    <prop opt string name="scope">
+    <prop string name="scope" default="r_liteprofile">
        The scope to ask permissions for.
     </prop>
     <prop name="finish" type="(ctx, token, user) => {}" default="setSession; redirect;">
