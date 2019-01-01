@@ -1,5 +1,9 @@
 ## 1 January 2018
 
+### 1.1.0
+
+- [feature] SVG Sign In Button.
+
 ### 1.0.0
 
 - [package] Publish.
