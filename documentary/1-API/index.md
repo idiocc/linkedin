@@ -46,7 +46,7 @@ The query method allows to query the LinkedIn API. The `v2` version of the API o
 
 The package provides the sign-in SVG button with the PNG fallback:
 
-![Sing In With LinkedIn](img/button.svg)
+![Sing In With LinkedIn](https://raw.github.com/idiocc/linkedin/master/img/button.svg?sanitize=true)
 
 ```html
 <a href="/auth/linkedin" title="Sign In with LinkedIn">

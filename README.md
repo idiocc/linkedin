@@ -121,21 +121,21 @@ const userDiv = (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 38ms 485b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=3097&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=3097&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 26ms 483b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=409&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=409&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=3097&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=409&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
-     'content-length': '485',
+     'content-length': '483',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6MzA5NywiX2V4cGlyZSI6MTU0NjQ1NDcyMTc5MCwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
-        'koa:sess.sig=Rta6MxrIaGIWNcUxb5TY0jDtKzA; path=/; httponly' ],
-     date: 'Tue, 01 Jan 2019 18:45:21 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6NDA5LCJfZXhwaXJlIjoxNTQ2NDU1NDUxNzE4LCJfbWF4QWdlIjo4NjQwMDAwMH0=; path=/; httponly',
+        'koa:sess.sig=jhz5Le51docbDaOwN11BMO_IYl4; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 18:57:31 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=3097&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=409&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -165,7 +165,7 @@ __<a name="type-queryconfig">`QueryConfig`</a>__: Options for Query.
 
 The package provides the sign-in SVG button with the PNG fallback:
 
-![Sing In With LinkedIn](img/button.svg)
+![Sing In With LinkedIn](https://raw.github.com/idiocc/linkedin/master/img/button.svg?sanitize=true)
 
 ```html
 <a href="/auth/linkedin" title="Sign In with LinkedIn">
