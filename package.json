@@ -1,6 +1,6 @@
 {
   "name": "@idio/linkedin",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "The LinkedIn OAuth Login Routes For The Idio Web Server.",
   "main": "build",
   "scripts": {
