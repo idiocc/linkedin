@@ -87,5 +87,5 @@ const userDiv = async (user) => {
   console.log(res)
   const { headers: { location } } = res
   console.log('\n > Redirect to Dialog %s', location)
-  await app.destroy()
+  if (!process.env.LIVE) await app.destroy()
 })()
