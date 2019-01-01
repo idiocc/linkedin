@@ -1,6 +1,6 @@
 # @idio/linkedin
 
-[![npm version](https://badge.fury.io/js/@idio/linkedin.svg)](https://npmjs.org/package/@idio/linkedin)
+[![npm version](https://badge.fury.io/js/%40idio%2Flinkedin.svg)](https://npmjs.org/package/@idio/linkedin)
 
 `@idio/linkedin` is The LinkedIn OAuth Login Routes For The Idio Web Server.
 
@@ -12,8 +12,10 @@ yarn add -E @idio/linkedin
 
 - [Table Of Contents](#table-of-contents)
 - [API](#api)
-- [`linkedin(arg1: string, arg2?: boolean)`](#mynewpackagearg1-stringarg2-boolean-void)
+- [`linkedin(router: Router, config: Config)`](#linkedinrouter-routerconfig-config-void)
   * [`Config`](#type-config)
+  * [finish](#finish)
+  * [query](#query)
 - [Copyright](#copyright)
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/0.svg?sanitize=true"></a></p>
@@ -28,33 +30,116 @@ import linkedin from '@idio/linkedin'
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/1.svg?sanitize=true"></a></p>
 
-## `linkedin(`<br/>&nbsp;&nbsp;`arg1: string,`<br/>&nbsp;&nbsp;`arg2?: boolean,`<br/>`): void`
+## `linkedin(`<br/>&nbsp;&nbsp;`router: Router,`<br/>&nbsp;&nbsp;`config: Config,`<br/>`): void`
 
-Call this function to get the result you want.
+Sets up the `/auth/linkedin` and `/auth/linkedin/redirect` paths on the router to enable LinkedIn App Login. The session middleware needs to be installed to remember the state. The state is destroyed after the redirect.
 
 __<a name="type-config">`Config`</a>__: Options for the program.
 
-|   Name    |   Type    |    Description    | Default |
-| --------- | --------- | ----------------- | ------- |
-| shouldRun | _boolean_ | A boolean option. | `true`  |
-| __text*__ | _string_  | A text to return. | -       |
+|        Name        |             Type              |                                                                         Description                                                                          |         Default         |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| __client_id*__     | _string_                      | The app's client id.                                                                                                                                         | -                       |
+| __client_secret*__ | _string_                      | The app's client secret.                                                                                                                                     | -                       |
+| path               | _string_                      | The server path to start the login flaw and use for redirect (`${path}/redirect`).                                                                           | `/auth/linkedin`        |
+| scope              | _string_                      | The scope to ask permissions for.                                                                                                                            | -                       |
+| finish             | _(ctx, token, user) =&gt; {}_ | The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. | `setSession; redirect;` |
 
 ```js
-/* yarn example/ */
-import linkedin from '@idio/linkedin'
+import linkedIn, { query } from '@idio/linkedin'
+import idioCore from '@idio/core'
 
-(async () => {
-  const res = await linkedin({
-    text: 'example',
+const Server = async () => {
+  const { url, router, app } = await idioCore({
+    session: { use: true, keys: [process.env.SESSION_KEY || 'dev'] },
+    logger: { use: true },
   })
-  console.log(res)
-})()
+  router.get('/', (ctx) => {
+    const u = userDiv(ctx.session.user)
+    ctx.body = `${u}hello world`
+  })
+  router.get('/signout', (ctx) => {
+    ctx.session = null
+    ctx.redirect('/')
+  })
+  linkedIn(router, {
+    client_id: process.env.LINKEDIN_ID,
+    client_secret: process.env.LINKEDIN_SECRET,
+    scope: 'r_liteprofile,r_basicprofile',
+    async finish(ctx, token, user) {
+      const { positions: { values: pos } } = await query({
+        token,
+        path: 'people/~:(positions)',
+        version: 'v1',
+      })
+      const positions = pos.map(({
+        title,
+        company: { id, name },
+        location: { name: location } ,
+      }) => {
+        return {
+          id, name, title,
+          location: location.replace(/,\s*$/, ''),
+        }
+      })
+      ctx.session.token = token
+      ctx.session.user = user
+      ctx.session.positions = positions
+      ctx.redirect('/')
+    },
+  })
+  app.use(router.routes())
+  return { app, url }
+}
+
+const userDiv = (user) => {
+  if (!user) return `
+    <div class="User">
+      Welcome.
+      <a href="/auth/linkedin">Sign in</a>
+    </div>
+  `
+  const img = `<img src="${user.profilePicture}" width="50">`
+  return `
+    <div class="User">
+      ${img} Hello, ${user.firstName} ${user.lastName}!
+      <a href="/signout">Sign out</a>
+    </div>`
+}
 ```
 ```
-example
+[+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
+http://localhost:5000 
+  <-- GET /auth/linkedin
+  --> GET /auth/linkedin 302 18ms 485b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=4057&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=4057&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  headers: 
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=4057&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+     'content-type': 'text/html; charset=utf-8',
+     'content-length': '485',
+     'set-cookie': 
+      [ 'koa:sess=eyJzdGF0ZSI6NDA1NywiX2V4cGlyZSI6MTU0NjQ0NDg1NjkzOCwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=0U36gNRJoirBN32Lu8Rzb0MLIG8; path=/; httponly' ],
+     date: 'Tue, 01 Jan 2019 16:00:56 GMT',
+     connection: 'close' },
+  statusCode: 302,
+  statusMessage: 'Found' }
+
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=4057&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
+
+### finish
+
+The config allows to set the finish function that can be used to alter the logic of setting the token on the session or performing additional operations such as storing a new user in the database. The default sets the token on the `ctx.session` and also sets the user data such as name and id in the `ctx.session.user` property.
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true" width="15"></a></p>
+
+### query
+
+The query method allows to query the LinkedIn API.
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
 
 ## Copyright
 
