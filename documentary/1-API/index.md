@@ -30,7 +30,7 @@ The config allows to set the finish function that can be used to alter the logic
 
 %~%
 
-```## getUser => { id, firstName, lastName, profilePicture }
+```## getUser => User
 [
   ["user", "*"]
 ]
