@@ -17,7 +17,7 @@ yarn add -E @idio/linkedin
   * [finish](#finish)
 - [`getUser(user: *): User`](#getuseruser--user)
   * [`User`](#type-user)
-- [`query(config: QueryConfig)`](#queryconfig-queryconfig-void)
+- [`async query(config: QueryConfig): *`](#async-queryconfig-queryconfig-)
   * [`QueryConfig`](#type-queryconfig)
 - [`linkedInButton(): { idioCommon, style, button }`](#linkedinbutton--idiocommon-style-button-)
 - [Copyright](#copyright)
@@ -130,21 +130,21 @@ const userDiv = async (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 80ms 485b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=2339&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=2339&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 57ms 483b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=751&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=751&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=2339&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=751&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
-     'content-length': '485',
+     'content-length': '483',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6MjMzOSwiX2V4cGlyZSI6MTU0NjQ3NDUxNDAwNSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
-        'koa:sess.sig=PDF34L4PoIHgmap3pkXDbBoGTTI; path=/; httponly' ],
-     date: 'Wed, 02 Jan 2019 00:15:14 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6NzUxLCJfZXhwaXJlIjoxNTQ2NDc0Njg3ODIyLCJfbWF4QWdlIjo4NjQwMDAwMH0=; path=/; httponly',
+        'koa:sess.sig=t-L_-APuZoB4HrKdLInpUk5dvv0; path=/; httponly' ],
+     date: 'Wed, 02 Jan 2019 00:18:07 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=2339&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=751&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -170,7 +170,7 @@ __<a name="type-user">`User`</a>__: The normalised user data from the `/me` path
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
 
-## `query(`<br/>&nbsp;&nbsp;`config: QueryConfig,`<br/>`): void`
+## `async query(`<br/>&nbsp;&nbsp;`config: QueryConfig,`<br/>`): *`
 
 The query method allows to query the LinkedIn API. The `v2` version of the API only allows to query basic data with the `r_liteprofile` permission. The other methods of the API are not pubic. This package will automatically query the `/me` route to find out the user's name and profile picture, therefore specifying the `r_liteprofile` scope is required. The `v1` version which is used to query positions with the `r_basicprofile` scope will be switched off in March 2019.
 

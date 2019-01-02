@@ -44,7 +44,7 @@ When data is requested from `/me` route for the lite profile, the results will c
 
 %~%
 
-```## query
+```## async query => *
 [
   ["config", "QueryConfig"]
 ]
