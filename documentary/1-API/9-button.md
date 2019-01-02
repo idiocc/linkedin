@@ -6,7 +6,7 @@ The package provides the implementation of the Sign-In button with CSS and HTML.
 ```table
 [
   ["Button", "Source"],
-  ["![Default Button](img/linkedin.png)", "The default Linked In button."],
+  ["![Default Button](img/linkedin.png)", "The default Linked In button from https://developer.linkedin.com/downloads."],
   ["![Idio Linkedin Button](img/button.png)", "Idio's button CSS+HTML implementation. It supports `hover`, `active` and `focus` properties."]
 ]
 ```
