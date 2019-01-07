@@ -49,15 +49,19 @@ __<a name="type-config">`Config`</a>__: Options for the program.
 | path               | _string_                      | The server path to start the login flaw and use for redirect (`${path}/redirect`).                                                                           | `/auth/linkedin`        |
 | scope              | _string_                      | The scope to ask permissions for.                                                                                                                            | `r_liteprofile`         |
 | finish             | _(ctx, token, user) =&gt; {}_ | The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. | `setSession; redirect;` |
+| session            | _Middleware_                  | The configured session middleware in case the `session` property is not globally available on the context.                                                   | -                       |
 
 ```js
 import linkedIn, { query, linkedInButton, getUser } from '@idio/linkedin'
 import idioCore from '@idio/core'
 
 const Server = async () => {
-  const { url, router, app } = await idioCore({
-    session: { use: true,
-      keys: [process.env.SESSION_KEY || 'dev'] },
+  const { url, router, app, middleware: {
+    session,
+  } } = await idioCore({
+    session: {
+      keys: [process.env.SESSION_KEY],
+    },
     logger: { use: true },
   })
   router.get('/', async (ctx) => {
@@ -71,11 +75,12 @@ const Server = async () => {
       </body>
     </html>`
   })
-  router.get('/signout', (ctx) => {
+  router.get('/signout', session, (ctx) => {
     ctx.session = null
     ctx.redirect('/')
   })
   linkedIn(router, {
+    session,
     client_id: process.env.LINKEDIN_ID,
     client_secret: process.env.LINKEDIN_SECRET,
     scope: 'r_liteprofile,r_basicprofile',
@@ -130,21 +135,21 @@ const userDiv = async (user) => {
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
 http://localhost:5000 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 57ms 483b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=751&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=751&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 16ms 485b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=2387&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=2387&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=751&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=2387&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
-     'content-length': '483',
+     'content-length': '485',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6NzUxLCJfZXhwaXJlIjoxNTQ2NDc0Njg3ODIyLCJfbWF4QWdlIjo4NjQwMDAwMH0=; path=/; httponly',
-        'koa:sess.sig=t-L_-APuZoB4HrKdLInpUk5dvv0; path=/; httponly' ],
-     date: 'Wed, 02 Jan 2019 00:18:07 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6MjM4NywiX2V4cGlyZSI6MTU0Njk1MDMxOTkxMCwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=mwSsIdp7CdEJWCPYVenWZvhv6Lk; path=/; httponly' ],
+     date: 'Mon, 07 Jan 2019 12:25:19 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=751&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=2387&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
