@@ -7,9 +7,12 @@ import linkedIn, { query, linkedInButton, getUser } from '../src'
 import idioCore from '@idio/core'
 
 const Server = async () => {
-  const { url, router, app } = await idioCore({
-    session: { use: true,
-      keys: [process.env.SESSION_KEY || 'dev'] },
+  const { url, router, app, middleware: {
+    session,
+  } } = await idioCore({
+    session: {
+      keys: [process.env.SESSION_KEY],
+    },
     logger: { use: true },
   })
   router.get('/', async (ctx) => {
@@ -23,11 +26,12 @@ const Server = async () => {
       </body>
     </html>`
   })
-  router.get('/signout', (ctx) => {
+  router.get('/signout', session, (ctx) => {
     ctx.session = null
     ctx.redirect('/')
   })
   linkedIn(router, {
+    session,
     client_id: process.env.LINKEDIN_ID,
     client_secret: process.env.LINKEDIN_SECRET,
     scope: 'r_liteprofile,r_basicprofile',

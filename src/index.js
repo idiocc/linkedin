@@ -45,6 +45,7 @@ export const getUser = user => {
  * @param {string} [config.path="/auth/linkedin"] The server path to start the login flaw and use for redirect (`${path}/redirect`). Default `/auth/linkedin`.
  * @param {string} [config.scope="r_liteprofile"] The scope to ask permissions for. Default `r_liteprofile`.
  * @param {(ctx, token, user) => {}} [config.finish="setSession; redirect;"] The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. Default `setSession; redirect;`.
+ * @param {Middleware} [config.session] The configured session middleware in case the `session` property is not globally available on the context.
  */
 export default async function linkedin(router, config = {}) {
   const {
@@ -58,6 +59,7 @@ export default async function linkedin(router, config = {}) {
       ctx.redirect('/')
       // await next()
     },
+    session,
   } = config
 
   if (!client_id) {
@@ -67,7 +69,7 @@ export default async function linkedin(router, config = {}) {
     console.warn('[linkedin] No client secret - the redirect won\'t work.')
   }
 
-  router.get(path, async (ctx) => {
+  const start = async (ctx) => {
     const state = Math.floor(Math.random() * 10000)
     ctx.session.state = state
     const redirect_uri = getRedirect(ctx, path)
@@ -78,9 +80,11 @@ export default async function linkedin(router, config = {}) {
       state,
     })
     ctx.redirect(u)
-  })
+  }
+  const startMw = session ? [session, start] : [start]
+  router.get(path, ...startMw)
 
-  router.get(`${path}/redirect`, async (ctx, next) => {
+  const redirect = async (ctx, next) => {
     const redirect_uri = getRedirect(ctx, path)
     const state = ctx.query.state
     if (state != ctx.session.state) {
@@ -97,7 +101,9 @@ export default async function linkedin(router, config = {}) {
     })
     const data = await getInfo(token)
     await finish(ctx, token, data, next)
-  })
+  }
+  const redirectMw = session ? [session, redirect] : [redirect]
+  router.get(`${path}/redirect`, ...redirectMw)
 }
 
 /**
@@ -212,12 +218,15 @@ export const linkedInButton = async () => {
 
 /* documentary types/index.xml */
 /**
+ * @typedef {import('koa').Middleware} Middleware
+ *
  * @typedef {Object} Config Options for the program.
  * @prop {string} client_id The app's client id.
  * @prop {string} client_secret The app's client secret.
  * @prop {string} [path="/auth/linkedin"] The server path to start the login flaw and use for redirect (`${path}/redirect`). Default `/auth/linkedin`.
  * @prop {string} [scope="r_liteprofile"] The scope to ask permissions for. Default `r_liteprofile`.
  * @prop {(ctx, token, user) => {}} [finish="setSession; redirect;"] The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. Default `setSession; redirect;`.
+ * @prop {Middleware} [session] The configured session middleware in case the `session` property is not globally available on the context.
  *
  * @typedef {Object} QueryConfig Options for Query.
  * @prop {string} token The access token with appropriate permissions.

@@ -1,4 +1,5 @@
 <types>
+  <import from="koa" name="Middleware"/>
   <type name="Config" desc="Options for the program.">
     <prop string name="client_id">
       The app's client id.
@@ -14,6 +15,9 @@
     </prop>
     <prop name="finish" type="(ctx, token, user) => {}" default="setSession; redirect;">
       The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`.
+    </prop>
+    <prop opt name="session" type="Middleware">
+      The configured session middleware in case the `session` property is not globally available on the context.
     </prop>
   </type>
   <type name="QueryConfig" desc="Options for Query.">
