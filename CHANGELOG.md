@@ -1,3 +1,9 @@
+## 7 January 2019
+
+### 1.3.0
+
+- [feature] Pass the configured `session` middleware.
+
 ## 2 January 2019
 
 ### 1.2.0
