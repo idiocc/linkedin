@@ -45,6 +45,7 @@ export const getUser = user => {
  * @param {string} [config.path="/auth/linkedin"] The server path to start the login flaw and use for redirect (`${path}/redirect`). Default `/auth/linkedin`.
  * @param {string} [config.scope="r_liteprofile"] The scope to ask permissions for. Default `r_liteprofile`.
  * @param {(ctx, token, user) => {}} [config.finish="setSession; redirect;"] The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. Default `setSession; redirect;`.
+ * @param {(ctx, error, error_description, next) => {}} [config.error="throw;"] The function to be called in case of error. If not specified, the middleware will throw an internal server error. Default `throw;`.
  * @param {Middleware} [config.session] The configured session middleware in case the `session` property is not globally available on the context.
  */
 export default async function linkedin(router, config = {}) {
@@ -53,6 +54,9 @@ export default async function linkedin(router, config = {}) {
     client_secret,
     path = '/auth/linkedin',
     scope = 'r_liteprofile',
+    error = (ctx, err, description) => {
+      throw new Error(description)
+    },
     finish = /* async */ (ctx, token, user, /* next */) => {
       ctx.session.token = token
       ctx.session.user = getUser(user)
@@ -91,6 +95,11 @@ export default async function linkedin(router, config = {}) {
       throw new Error('The state is incorrect.')
     }
     ctx.session.state = null
+    if (ctx.query.error) {
+      const { error: e, error_description } = ctx.query
+      await error(ctx, e, error_description, next)
+      return
+    }
     if (!ctx.query.code) throw new Error('Code Not Found.')
 
     const token = await exchange({
@@ -226,6 +235,7 @@ export const linkedInButton = async () => {
  * @prop {string} [path="/auth/linkedin"] The server path to start the login flaw and use for redirect (`${path}/redirect`). Default `/auth/linkedin`.
  * @prop {string} [scope="r_liteprofile"] The scope to ask permissions for. Default `r_liteprofile`.
  * @prop {(ctx, token, user) => {}} [finish="setSession; redirect;"] The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. Default `setSession; redirect;`.
+ * @prop {(ctx, error, error_description, next) => {}} [error="throw;"] The function to be called in case of error. If not specified, the middleware will throw an internal server error. Default `throw;`.
  * @prop {Middleware} [session] The configured session middleware in case the `session` property is not globally available on the context.
  *
  * @typedef {Object} QueryConfig Options for Query.

@@ -16,6 +16,9 @@
     <prop name="finish" type="(ctx, token, user) => {}" default="setSession; redirect;">
       The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`.
     </prop>
+    <prop name="error" type="(ctx, error, error_description, next) => {}" default="throw;">
+      The function to be called in case of error. If not specified, the middleware will throw an internal server error.
+    </prop>
     <prop opt name="session" type="Middleware">
       The configured session middleware in case the `session` property is not globally available on the context.
     </prop>

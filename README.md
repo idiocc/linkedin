@@ -15,6 +15,7 @@ yarn add -E @idio/linkedin
 - [`linkedin(router: Router, config: Config)`](#linkedinrouter-routerconfig-config-void)
   * [`Config`](#type-config)
   * [finish](#finish)
+  * [error](#error)
 - [`getUser(user: *): User`](#getuseruser--user)
   * [`User`](#type-user)
 - [`async query(config: QueryConfig): *`](#async-queryconfig-queryconfig-)
@@ -42,14 +43,15 @@ Sets up the `/auth/linkedin` and `/auth/linkedin/redirect` paths on the router t
 
 __<a name="type-config">`Config`</a>__: Options for the program.
 
-|        Name        |             Type              |                                                                         Description                                                                          |         Default         |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| __client_id*__     | _string_                      | The app's client id.                                                                                                                                         | -                       |
-| __client_secret*__ | _string_                      | The app's client secret.                                                                                                                                     | -                       |
-| path               | _string_                      | The server path to start the login flaw and use for redirect (`${path}/redirect`).                                                                           | `/auth/linkedin`        |
-| scope              | _string_                      | The scope to ask permissions for.                                                                                                                            | `r_liteprofile`         |
-| finish             | _(ctx, token, user) =&gt; {}_ | The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. | `setSession; redirect;` |
-| session            | _Middleware_                  | The configured session middleware in case the `session` property is not globally available on the context.                                                   | -                       |
+|        Name        |                       Type                       |                                                                         Description                                                                          |         Default         |
+| ------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| __client_id*__     | _string_                                         | The app's client id.                                                                                                                                         | -                       |
+| __client_secret*__ | _string_                                         | The app's client secret.                                                                                                                                     | -                       |
+| path               | _string_                                         | The server path to start the login flaw and use for redirect (`${path}/redirect`).                                                                           | `/auth/linkedin`        |
+| scope              | _string_                                         | The scope to ask permissions for.                                                                                                                            | `r_liteprofile`         |
+| finish             | _(ctx, token, user) =&gt; {}_                    | The function to complete the authentication that receives the token and the data about the user, such as name and id. The default function redirects to `/`. | `setSession; redirect;` |
+| error              | _(ctx, error, error_description, next) =&gt; {}_ | The function to be called in case of error. If not specified, the middleware will throw an internal server error.                                            | `throw;`                |
+| session            | _Middleware_                                     | The configured session middleware in case the `session` property is not globally available on the context.                                                   | -                       |
 
 ```js
 import linkedIn, { query, linkedInButton, getUser } from '@idio/linkedin'
@@ -63,7 +65,7 @@ const Server = async () => {
       keys: [process.env.SESSION_KEY],
     },
     logger: { use: true },
-  })
+  }, { port: 0 })
   router.get('/', async (ctx) => {
     const u = await userDiv(ctx.session.user)
     ctx.body = `<!doctype html>
@@ -84,6 +86,9 @@ const Server = async () => {
     client_id: process.env.LINKEDIN_ID,
     client_secret: process.env.LINKEDIN_SECRET,
     scope: 'r_liteprofile,r_basicprofile',
+    error(ctx, error) {
+      ctx.redirect(`/?error=${error}`)
+    },
     async finish(ctx, token, user) {
       const { positions: { values: pos } } = await query({
         token,
@@ -133,23 +138,23 @@ const userDiv = async (user) => {
 ```
 ```
 [+] LINKEDIN_ID [+] LINKEDIN_SECRET [+] SESSION_KEY 
-http://localhost:5000 
+http://localhost:65210 
   <-- GET /auth/linkedin
-  --> GET /auth/linkedin 302 16ms 485b
-{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=2387&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=2387&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
+  --> GET /auth/linkedin 302 35ms 487b
+{ body: 'Redirecting to <a href="https://www.linkedin.com/oauth/v2/authorization?state=7739&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A65210%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile">https://www.linkedin.com/oauth/v2/authorization?state=7739&amp;response_type=code&amp;client_id=86986rqg6dmn58&amp;redirect_uri=http%3A%2F%2Flocalhost%3A65210%2Fauth%2Flinkedin%2Fredirect&amp;scope=r_liteprofile%2Cr_basicprofile</a>.',
   headers: 
-   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=2387&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
+   { location: 'https://www.linkedin.com/oauth/v2/authorization?state=7739&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A65210%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile',
      'content-type': 'text/html; charset=utf-8',
-     'content-length': '485',
+     'content-length': '487',
      'set-cookie': 
-      [ 'koa:sess=eyJzdGF0ZSI6MjM4NywiX2V4cGlyZSI6MTU0Njk1MDMxOTkxMCwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
-        'koa:sess.sig=mwSsIdp7CdEJWCPYVenWZvhv6Lk; path=/; httponly' ],
-     date: 'Mon, 07 Jan 2019 12:25:19 GMT',
+      [ 'koa:sess=eyJzdGF0ZSI6NzczOSwiX2V4cGlyZSI6MTU0NzAzODExNTUxOSwiX21heEFnZSI6ODY0MDAwMDB9; path=/; httponly',
+        'koa:sess.sig=w_PIzlf56BzzK4-XTnXWKCD0oMc; path=/; httponly' ],
+     date: 'Tue, 08 Jan 2019 12:48:35 GMT',
      connection: 'close' },
   statusCode: 302,
   statusMessage: 'Found' }
 
- > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=2387&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
+ > Redirect to Dialog https://www.linkedin.com/oauth/v2/authorization?state=7739&response_type=code&client_id=86986rqg6dmn58&redirect_uri=http%3A%2F%2Flocalhost%3A65210%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile
 ```
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="15"></a></p>
@@ -158,7 +163,13 @@ http://localhost:5000
 
 The config allows to set the finish function that can be used to alter the logic of setting the token on the session or performing additional operations such as storing a new user in the database. The default sets the token on the `ctx.session` and also sets the user data such as name and id in the `ctx.session.user` property.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true" width="15"></a></p>
+
+### error
+
+The `error` property of the config represent the function to be called in case of an error such as when the user cancelled the authorisation request. It can be used to redirect to the path and set the error text and description in the query parameters. When default handler is used, the `@idio/linkedin` middleware will throw internally.
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
 
 ## `getUser(`<br/>&nbsp;&nbsp;`user: *,`<br/>`): User`
 
@@ -173,7 +184,7 @@ __<a name="type-user">`User`</a>__: The normalised user data from the `/me` path
 | __lastName*__       | _string_ | The user's last name.           |
 | __profilePicture*__ | _string_ | The URL to the profile picture. |
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true"></a></p>
 
 ## `async query(`<br/>&nbsp;&nbsp;`config: QueryConfig,`<br/>`): *`
 
@@ -188,7 +199,7 @@ __<a name="type-queryconfig">`QueryConfig`</a>__: Options for Query.
 | __data*__  | _*_      | The object containing data to query the API with. | -       |
 | version    | _string_ | The version of the API to query.                  | `v2`    |
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true"></a></p>
 
 ## `linkedInButton(): { idioCommon, style, button }`
 
@@ -199,7 +210,7 @@ The package provides the implementation of the Sign-In button with CSS and HTML.
 | ![Default Button](img/linkedin.png)     | The default Linked In button from https://developer.linkedin.com/downloads.                  |
 | ![Idio Linkedin Button](img/button.png) | Idio's button CSS+HTML implementation. It supports `hover`, `active` and `focus` properties. |
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true"></a></p>
 
 ## Copyright
 

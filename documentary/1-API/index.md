@@ -30,6 +30,12 @@ Sets up the `/auth/linkedin` and `/auth/linkedin/redirect` paths on the router t
 
 The config allows to set the finish function that can be used to alter the logic of setting the token on the session or performing additional operations such as storing a new user in the database. The default sets the token on the `ctx.session` and also sets the user data such as name and id in the `ctx.session.user` property.
 
+%~ width="15"%
+
+### error
+
+The `error` property of the config represent the function to be called in case of an error such as when the user cancelled the authorisation request. It can be used to redirect to the path and set the error text and description in the query parameters. When default handler is used, the `@idio/linkedin` middleware will throw internally.
+
 %~%
 
 ```## getUser => User

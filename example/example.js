@@ -14,7 +14,7 @@ const Server = async () => {
       keys: [process.env.SESSION_KEY],
     },
     logger: { use: true },
-  })
+  }, { port: 0 })
   router.get('/', async (ctx) => {
     const u = await userDiv(ctx.session.user)
     ctx.body = `<!doctype html>
@@ -35,6 +35,9 @@ const Server = async () => {
     client_id: process.env.LINKEDIN_ID,
     client_secret: process.env.LINKEDIN_SECRET,
     scope: 'r_liteprofile,r_basicprofile',
+    error(ctx, error) {
+      ctx.redirect(`/?error=${error}`)
+    },
     async finish(ctx, token, user) {
       const { positions: { values: pos } } = await query({
         token,
