@@ -1,3 +1,9 @@
+## 8 January 2019
+
+### 1.4.0
+
+- [feature] Accept the `error` callback to handle errors such as cancellation of authorisation flow.
+
 ## 7 January 2019
 
 ### 1.3.0
