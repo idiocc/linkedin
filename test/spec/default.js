@@ -13,7 +13,7 @@ const T = {
   async 'redirects to facebook'() {
     const { app, router, url } = await core({
       session: { use: true, keys: ['test'] },
-    })
+    }, { port: 0 })
     linkedin(router, {
       client_id: 'client-id',
       client_secret: 'client-secret',
@@ -23,12 +23,13 @@ const T = {
     app.destroy()
     const { location } = headers
     const l = location.replace(/state=\d+&/, '')
-    equal(l, 'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=client-id&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile')
+    const e = encodeURIComponent(url)
+    equal(l, `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=client-id&redirect_uri=${e}%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile`)
   },
   async 'redirects to facebook with scope'() {
     const { app, router, url } = await core({
       session: { use: true, keys: ['test'] },
-    })
+    }, { port: 0 })
     linkedin(router, {
       client_id: 'client-id',
       client_secret: 'client-secret',
@@ -39,7 +40,8 @@ const T = {
     app.destroy()
     const { location } = headers
     const l = location.replace(/state=\d+&/, '')
-    equal(l, 'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=client-id&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile')
+    const e = encodeURIComponent(url)
+    equal(l, `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=client-id&redirect_uri=${e}%2Fauth%2Flinkedin%2Fredirect&scope=r_liteprofile%2Cr_basicprofile`)
   },
 }
 
